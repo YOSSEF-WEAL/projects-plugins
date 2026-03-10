@@ -1,0 +1,32 @@
+# Change Log
+
+## 2026-03-09
+- إعادة تصميم قالب `single-project.php` ليكون أقرب للتصميم المطلوب.
+- تحويل Gallery إلى `Swiper.js` فعلي مع thumbnails.
+- إصلاحات Overflow في الصفحة والسلايدر.
+- ترتيب intro section: المحتوى يمين والسلايدر شمال على الديسكتوب.
+- استبدال عدّاد الصور في الـHero بـ Excerpt.
+- إزالة قسم "ملخص المشروع".
+- إضافة Lightbox مستقل:
+  - `assets/js/gallery-lightbox.js`
+  - `assets/css/gallery-lightbox.css`
+  - زر تكبير داخل `templates/parts/slider.php`
+  - أسهم تقليب داخل الـLightbox.
+- تحويل أيقونات السلايدر/اللايتبوكس لاستخدام ملفات SVG من `public/`.
+- توحيد ألوان الواجهة لاستخدام متغيرات Elementor:
+  - `--e-global-color-primary`
+  - `--e-global-color-secondary`
+- إصلاح ربط الألوان ليتم الاستهلاك المباشر من متغيرات Elementor مع fallback موحد على مستوى الموديولات.
+- إزالة `:root` المحلي الخاص بالألوان من `frontend.css`، والاعتماد مباشرة على ألوان الموقع:
+  - `var(--e-global-color-primary)`
+  - `var(--e-global-color-secondary)`
+- إضافة overrides واضحة لأزرار السلايدر والـLightbox لمنع ستايل الثيم العام (`button`) من كسر الألوان.
+- توحيد مقاسات وألوان أزرار الـLightbox لتطابق أزرار السلايدر الخارجية (nav/close/icon sizes).
+- تنظيف تعارضات CSS في `frontend.css` لضبط:
+  - زر التكبير يرجع فوق الصورة (`top: 14px; left: 14px`)
+  - توحيد أحجام الأيقونات والأزرار بين السلايدر والـLightbox.
+- توحيد أزرار السلايدر والـLightbox بصريًا:
+  - نفس مقاس الأزرار (`42x42` دسكتوب)
+  - نفس مواضع الأسهم داخل الإطار
+  - إجبار لون أيقونات SVG إلى الأبيض عبر `filter`.
+- عرض Excerpt كامل في هيدر صفحة المشروع بدون قص وبدون خلفية/بادج.

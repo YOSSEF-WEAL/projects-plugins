@@ -1,0 +1,124 @@
+.pp-lightbox-open {
+    overflow: hidden;
+}
+
+.pp-lightbox-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+}
+
+.pp-lightbox-modal.is-open {
+    display: block;
+}
+
+.pp-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 8, 12, 0.88);
+}
+
+.pp-lightbox-dialog {
+    position: absolute;
+    inset: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pp-lightbox-swiper {
+    width: min(1200px, 94vw);
+    height: min(78vh, 860px);
+}
+
+.pp-lightbox-swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pp-lightbox-swiper .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pp-lightbox-close,
+.pp-lightbox-nav {
+    border: 0;
+    border-radius: 999px !important;
+    background: var(--e-global-color-primary) !important;
+    border: 1px solid var(--e-global-color-secondary) !important;
+    color: #fff !important;
+    cursor: pointer;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pp-lightbox-close {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 42px !important;
+    height: 42px !important;
+    z-index: 100003;
+}
+
+.pp-lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100002;
+    width: 42px !important;
+    height: 42px !important;
+}
+
+.pp-lightbox-close img,
+.pp-lightbox-nav img {
+    width: 18px;
+    height: 18px;
+    display: block;
+    filter: brightness(0) invert(1) !important;
+}
+
+.pp-lightbox-next {
+    left: 14px;
+}
+
+.pp-lightbox-prev {
+    right: 14px;
+}
+
+@media (max-width: 760px) {
+    .pp-lightbox-dialog {
+        inset: 14px;
+    }
+
+    .pp-lightbox-swiper {
+        height: 68vh;
+    }
+
+    .pp-lightbox-nav {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .pp-lightbox-close {
+        width: 36px !important;
+        height: 36px !important;
+        top: 10px;
+        left: 10px;
+    }
+
+    .pp-lightbox-next {
+        left: 10px;
+    }
+
+    .pp-lightbox-prev {
+        right: 10px;
+    }
+}

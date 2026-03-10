@@ -1,0 +1,16 @@
+.pp-gallery-preview,
+.pp-term-image-preview {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pp-gallery-preview img,
+.pp-term-image-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
