@@ -106,11 +106,27 @@ class PP_Projects_Widget extends Widget_Base {
             'description' => __('Overrides the global pagination items per page for this widget.', 'projects-plugin'),
         ]);
 
-        $this->add_control('columns', [
-            'label' => __('Columns', 'projects-plugin'),
+        $this->add_control('columns_desktop', [
+            'label' => __('Columns (Desktop)', 'projects-plugin'),
             'type' => Controls_Manager::SELECT,
             'default' => '3',
             'options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4'],
+            'condition' => ['layout!' => 'slider'],
+        ]);
+
+        $this->add_control('columns_tablet', [
+            'label' => __('Columns (Tablet)', 'projects-plugin'),
+            'type' => Controls_Manager::SELECT,
+            'default' => '2',
+            'options' => ['1' => '1', '2' => '2', '3' => '3'],
+            'condition' => ['layout!' => 'slider'],
+        ]);
+
+        $this->add_control('columns_mobile', [
+            'label' => __('Columns (Mobile)', 'projects-plugin'),
+            'type' => Controls_Manager::SELECT,
+            'default' => '1',
+            'options' => ['1' => '1', '2' => '2'],
             'condition' => ['layout!' => 'slider'],
         ]);
 
@@ -711,6 +727,10 @@ class PP_Projects_Widget extends Widget_Base {
         $slider_cards_desktop = max(1, absint($settings['slider_cards_desktop'] ?? 3));
         $slider_cards_tablet = max(1, absint($settings['slider_cards_tablet'] ?? 2));
         $slider_cards_mobile = max(1, absint($settings['slider_cards_mobile'] ?? 1));
+        $columns_fallback = (string) ($settings['columns'] ?? '3');
+        $cols_desktop = (string) ($settings['columns_desktop'] ?? $columns_fallback);
+        $cols_tablet = (string) ($settings['columns_tablet'] ?? '2');
+        $cols_mobile = (string) ($settings['columns_mobile'] ?? '1');
         $align_choice = $settings['items_align'] ?? 'start';
         $align_value = in_array($align_choice, ['start', 'center', 'end', 'stretch'], true) ? $align_choice : 'start';
         $justify_choice = $settings['items_justify'] ?? 'start';
@@ -732,7 +752,7 @@ class PP_Projects_Widget extends Widget_Base {
         echo '<div class="pp-projects-widget"';
         echo ' data-layout="' . esc_attr($layout) . '"';
         echo ' data-pagination="' . esc_attr($settings['pagination'] ?? 'classic') . '"';
-        echo ' data-columns="' . esc_attr($settings['columns'] ?? '3') . '"';
+        echo ' data-columns="' . esc_attr($cols_desktop) . '"';
         echo ' data-show-image="' . esc_attr(($settings['show_image'] ?? 'yes') === 'yes' ? '1' : '0') . '"';
         echo ' data-show-title="' . esc_attr(($settings['show_title'] ?? 'yes') === 'yes' ? '1' : '0') . '"';
         echo ' data-show-excerpt="' . esc_attr(($settings['show_excerpt'] ?? 'yes') === 'yes' ? '1' : '0') . '"';
@@ -757,17 +777,20 @@ class PP_Projects_Widget extends Widget_Base {
 
         $list_classes = 'pp-projects-list pp-layout-' . esc_attr($layout);
         if (!$is_slider) {
-            $list_classes .= ' pp-cols-' . esc_attr($settings['columns'] ?? '3');
+            $list_classes .= ' pp-cols-' . esc_attr($cols_desktop);
         } else {
             $list_classes .= ' pp-slider-track swiper';
         }
 
         $style_vars = '';
         if (!$is_slider) {
-            $style_vars = ' style="--pp-justify-items:' . esc_attr($justify_items_value) . ';--pp-align-items:' . esc_attr($align_value) . ';--pp-justify-content:' . esc_attr($justify_value) . ';"';
+            $style_vars = ' style="--pp-cols-desktop:' . esc_attr($cols_desktop) . ';--pp-cols-tablet:' . esc_attr($cols_tablet) . ';--pp-cols-mobile:' . esc_attr($cols_mobile) . ';--pp-justify-items:' . esc_attr($justify_items_value) . ';--pp-align-items:' . esc_attr($align_value) . ';--pp-justify-content:' . esc_attr($justify_value) . ';"';
         }
 
         echo '<div class="' . esc_attr($list_classes) . '"' . $style_vars;
+        if (!$is_slider) {
+            echo ' data-columns="' . esc_attr($cols_desktop) . '"';
+        }
         if ($is_slider) {
             echo ' data-slider-desktop="' . esc_attr($slider_cards_desktop) . '"';
             echo ' data-slider-tablet="' . esc_attr($slider_cards_tablet) . '"';
