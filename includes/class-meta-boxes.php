@@ -33,6 +33,7 @@ class PP_Meta_Boxes {
         $location_label = get_post_meta($post->ID, '_pp_location_label', true);
         $location_lat = get_post_meta($post->ID, '_pp_location_lat', true);
         $location_lng = get_post_meta($post->ID, '_pp_location_lng', true);
+        $location_shortlink = get_post_meta($post->ID, '_pp_location_shortlink', true);
         $location_display = get_post_meta($post->ID, '_pp_location_display', true);
         ?>
         <p>
@@ -69,6 +70,12 @@ class PP_Meta_Boxes {
         </p>
 
         <p>
+            <label for="pp_location_shortlink"><strong><?php esc_html_e('Google Maps Short Link (optional)', 'projects-plugin'); ?></strong></label>
+            <input type="url" id="pp_location_shortlink" name="pp_location_shortlink" value="<?php echo esc_attr($location_shortlink); ?>" class="widefat" placeholder="https://maps.app.goo.gl/...">
+            <small><?php esc_html_e('Use either Latitude/Longitude or a Maps short link.', 'projects-plugin'); ?></small>
+        </p>
+
+        <p>
             <label for="pp_location_display"><strong><?php esc_html_e('Location Display', 'projects-plugin'); ?></strong></label><br>
             <select id="pp_location_display" name="pp_location_display">
                 <option value=""><?php esc_html_e('Default from settings', 'projects-plugin'); ?></option>
@@ -97,6 +104,7 @@ class PP_Meta_Boxes {
             '_pp_location_label' => isset($_POST['pp_location_label']) ? sanitize_text_field(wp_unslash($_POST['pp_location_label'])) : '',
             '_pp_location_lat' => isset($_POST['pp_location_lat']) ? sanitize_text_field(wp_unslash($_POST['pp_location_lat'])) : '',
             '_pp_location_lng' => isset($_POST['pp_location_lng']) ? sanitize_text_field(wp_unslash($_POST['pp_location_lng'])) : '',
+            '_pp_location_shortlink' => isset($_POST['pp_location_shortlink']) ? esc_url_raw(wp_unslash($_POST['pp_location_shortlink'])) : '',
             '_pp_location_display' => isset($_POST['pp_location_display']) ? sanitize_text_field(wp_unslash($_POST['pp_location_display'])) : '',
         ];
 

@@ -47,9 +47,47 @@ class PP_Helpers {
         return in_array($default, ['link', 'map'], true) ? $default : 'link';
     }
 
-    public static function get_google_maps_link($lat, $lng, $label = '') {
+    public static function is_valid_coordinates($lat, $lng) {
+        if (!is_numeric($lat) || !is_numeric($lng)) {
+            return false;
+        }
+
+        $lat_f = (float) $lat;
+        $lng_f = (float) $lng;
+        return $lat_f >= -90 && $lat_f <= 90 && $lng_f >= -180 && $lng_f <= 180;
+    }
+
+    public static function get_google_maps_link($lat, $lng, $label = '', $shortlink = '') {
+        $shortlink = esc_url_raw((string) $shortlink);
+        if (!empty($shortlink)) {
+            return $shortlink;
+        }
+
+        if (self::is_valid_coordinates($lat, $lng)) {
+            return 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode((string) $lat . ',' . (string) $lng);
+        }
+
         $query = $label ? rawurlencode($label) : $lat . ',' . $lng;
         return 'https://www.google.com/maps/search/?api=1&query=' . $query;
+    }
+
+    public static function get_project_location_link($post_id, $lat = '', $lng = '', $label = '') {
+        $shortlink = get_post_meta($post_id, '_pp_location_shortlink', true);
+        return self::get_google_maps_link($lat, $lng, $label, $shortlink);
+    }
+
+    public static function get_google_embed_src($lat, $lng, $api_key = '', $zoom = 14) {
+        if (!self::is_valid_coordinates($lat, $lng)) {
+            return '';
+        }
+
+        $api_key = trim((string) $api_key);
+        if ($api_key === '') {
+            return '';
+        }
+
+        $zoom_val = max(1, min(20, (int) $zoom));
+        return 'https://www.google.com/maps/embed/v1/view?zoom=' . $zoom_val . '&center=' . rawurlencode((string) $lat . ',' . (string) $lng) . '&key=' . rawurlencode($api_key);
     }
 
     public static function get_excerpt($post_id, $length = 20) {

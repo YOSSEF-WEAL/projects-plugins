@@ -2,20 +2,19 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-$has_content = trim((string) get_the_content()) !== '';
 ?>
 <article class="pp-layout pp-layout-08">
     <section class="pp-l08-wrap">
         <aside class="pp-l08-side">
             <h1><?php the_title(); ?></h1>
-            <?php if (!empty($project_excerpt)) : ?><p><?php echo esc_html($project_excerpt); ?></p><?php endif; ?>
-            <?php if ($primary_term) : ?><span class="pp-l08-chip"><?php echo esc_html($primary_term->name); ?></span><?php endif; ?>
-            <?php if ($has_location) : ?><a class="pp-location-link" href="<?php echo esc_url(PP_Helpers::get_google_maps_link($location_lat, $location_lng, $location_label)); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('الموقع', 'projects-plugin'); ?></a><?php endif; ?>
+            <?php if (!empty((string) pp_single_get('project_excerpt', ''))) : ?><p><?php echo esc_html((string) pp_single_get('project_excerpt', '')); ?></p><?php endif; ?>
+            <?php if (pp_single_primary_term_name('') !== '') : ?><span class="pp-l08-chip"><?php echo esc_html(pp_single_primary_term_name('')); ?></span><?php endif; ?>
+            <?php if (pp_single_has_location()) : ?><?php pp_single_render_location_link(__('الموقع', 'projects-plugin')); ?><?php endif; ?>
         </aside>
 
         <div class="pp-l08-main">
-            <?php if ($has_content) : ?><section class="pp-l08-content"><?php the_content(); ?></section><?php endif; ?>
-            <?php if (!empty($gallery_ids)) : ?><section class="pp-l08-gallery"><?php $args = ['ids' => $gallery_ids]; include PP_PATH . 'templates/parts/slider.php'; ?></section><?php endif; ?>
+            <?php if (pp_single_has_content()) : ?><section class="pp-l08-content"><?php pp_single_render_content(); ?></section><?php endif; ?>
+            <?php if (pp_single_has_gallery()) : ?><section class="pp-l08-gallery"><?php pp_single_render_gallery(); ?></section><?php endif; ?>
         </div>
     </section>
 </article>

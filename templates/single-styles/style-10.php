@@ -2,30 +2,20 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
-$has_content = trim((string) get_the_content()) !== '';
-$map_src = '';
-if ($has_location) {
-    $api_key = PP_Helpers::get_setting('google_maps_api_key', '');
-    $map_src = 'https://www.google.com/maps/embed/v1/view?zoom=12&center=' . rawurlencode($location_lat . ',' . $location_lng);
-    if (!empty($api_key)) {
-        $map_src .= '&key=' . rawurlencode($api_key);
-    }
-}
 ?>
 <article class="pp-layout pp-layout-10">
-    <header class="pp-l10-hero <?php echo has_post_thumbnail() ? 'has-image' : 'no-image'; ?>">
+    <header class="pp-l10-hero <?php echo pp_single_has_thumbnail() ? 'has-image' : 'no-image'; ?>">
         <div class="pp-l10-hero-copy">
             <span class="pp-l10-kicker"><?php esc_html_e('Project', 'projects-plugin'); ?></span>
             <h1><?php the_title(); ?></h1>
-            <?php if (!empty($project_excerpt)) : ?>
-                <p class="pp-l10-excerpt"><?php echo esc_html($project_excerpt); ?></p>
+            <?php if (!empty((string) pp_single_get('project_excerpt', ''))) : ?>
+                <p class="pp-l10-excerpt"><?php echo esc_html((string) pp_single_get('project_excerpt', '')); ?></p>
             <?php endif; ?>
         </div>
 
         <div class="pp-l10-hero-media">
-            <?php if (has_post_thumbnail()) : ?>
-                <?php the_post_thumbnail('large'); ?>
+            <?php if (pp_single_has_thumbnail()) : ?>
+                <?php pp_single_render_thumbnail('large'); ?>
             <?php else : ?>
                 <div class="pp-l10-media-placeholder" aria-hidden="true"></div>
             <?php endif; ?>
@@ -35,11 +25,11 @@ if ($has_location) {
     <section class="pp-l10-facts">
         <div class="pp-l10-fact">
             <span><?php esc_html_e('Category', 'projects-plugin'); ?></span>
-            <strong><?php echo esc_html($primary_term ? $primary_term->name : __('Uncategorized', 'projects-plugin')); ?></strong>
+            <strong><?php echo esc_html(pp_single_primary_term_name(__('Uncategorized', 'projects-plugin'))); ?></strong>
         </div>
         <div class="pp-l10-fact">
             <span><?php esc_html_e('Location', 'projects-plugin'); ?></span>
-            <strong><?php echo esc_html($location_label ?: __('No location', 'projects-plugin')); ?></strong>
+            <strong><?php echo esc_html(pp_single_location_label(__('No location', 'projects-plugin'))); ?></strong>
         </div>
         <div class="pp-l10-fact">
             <span><?php esc_html_e('Published', 'projects-plugin'); ?></span>
@@ -52,32 +42,32 @@ if ($has_location) {
     </section>
 
     <section class="pp-l10-main">
-        <?php if ($has_content) : ?>
+        <?php if (pp_single_has_content()) : ?>
             <div class="pp-l10-content">
                 <h2><?php esc_html_e('Project Overview', 'projects-plugin'); ?></h2>
-                <div class="pp-project-content"><?php the_content(); ?></div>
+                <div class="pp-project-content"><?php pp_single_render_content(); ?></div>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($gallery_ids)) : ?>
+        <?php if (pp_single_has_gallery()) : ?>
             <aside class="pp-l10-gallery">
                 <h2><?php esc_html_e('Project Gallery', 'projects-plugin'); ?></h2>
-                <?php $args = ['ids' => $gallery_ids]; include PP_PATH . 'templates/parts/slider.php'; ?>
+                <?php pp_single_render_gallery(); ?>
             </aside>
         <?php endif; ?>
     </section>
 
-    <?php if ($has_location) : ?>
+    <?php if (pp_single_has_location()) : ?>
         <section class="pp-l10-location">
             <div class="pp-l10-location-head">
                 <h2><?php esc_html_e('Project Location', 'projects-plugin'); ?></h2>
-                <a class="pp-location-link" href="<?php echo esc_url(PP_Helpers::get_google_maps_link($location_lat, $location_lng, $location_label)); ?>" target="_blank" rel="noopener noreferrer">
-                    <?php esc_html_e('Open Detailed Map', 'projects-plugin'); ?>
-                </a>
+                <?php pp_single_render_location_link(__('Open Detailed Map', 'projects-plugin')); ?>
             </div>
-            <div class="pp-l10-map">
-                <iframe title="project-location-map" width="100%" height="340" style="border:0" loading="lazy" allowfullscreen src="<?php echo esc_url($map_src); ?>"></iframe>
-            </div>
+            <?php if (pp_single_can_show_embed_map()) : ?>
+                <div class="pp-l10-map">
+                    <?php pp_single_render_location_map(340, 'project-location-map'); ?>
+                </div>
+            <?php endif; ?>
         </section>
     <?php endif; ?>
 </article>
