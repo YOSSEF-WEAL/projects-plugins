@@ -101,7 +101,12 @@ class PP_Updater {
     }
 
     public function normalize_source_directory($source, $remote_source, $upgrader, $hook_extra) {
-        if (empty($hook_extra['plugin']) || $hook_extra['plugin'] !== $this->plugin_basename) {
+        $is_target_plugin = !empty($hook_extra['plugin']) && $hook_extra['plugin'] === $this->plugin_basename;
+        if (!$is_target_plugin && !empty($hook_extra['plugins']) && is_array($hook_extra['plugins'])) {
+            $is_target_plugin = in_array($this->plugin_basename, $hook_extra['plugins'], true);
+        }
+
+        if (!$is_target_plugin) {
             return $source;
         }
 
@@ -113,6 +118,12 @@ class PP_Updater {
         $source = untrailingslashit($source);
         $remote_source = untrailingslashit($remote_source);
         $normalized = $remote_source . '/' . $this->plugin_directory;
+        $plugin_main_file = basename($this->plugin_basename);
+
+        $detected_source = $this->detect_plugin_source_directory($source, $plugin_main_file, $wp_filesystem);
+        if (!empty($detected_source)) {
+            $source = $detected_source;
+        }
 
         if (wp_normalize_path($source) === wp_normalize_path($normalized) || basename($source) === $this->plugin_directory) {
             return $source;
@@ -167,6 +178,30 @@ class PP_Updater {
         }
 
         return $normalized;
+    }
+
+    private function detect_plugin_source_directory($source, $plugin_main_file, $wp_filesystem) {
+        if ($wp_filesystem->exists($source . '/' . $plugin_main_file)) {
+            return $source;
+        }
+
+        $entries = $wp_filesystem->dirlist($source, false, true);
+        if (!is_array($entries)) {
+            return '';
+        }
+
+        foreach ($entries as $entry_name => $entry_data) {
+            if (empty($entry_data['type']) || $entry_data['type'] !== 'd') {
+                continue;
+            }
+
+            $candidate = $source . '/' . $entry_name;
+            if ($wp_filesystem->exists($candidate . '/' . $plugin_main_file)) {
+                return $candidate;
+            }
+        }
+
+        return '';
     }
 
     public function clear_cache_after_upgrade($upgrader, $hook_extra) {
