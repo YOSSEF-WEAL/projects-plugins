@@ -180,9 +180,13 @@ class PP_Updater {
         return $normalized;
     }
 
-    private function detect_plugin_source_directory($source, $plugin_main_file, $wp_filesystem) {
+    private function detect_plugin_source_directory($source, $plugin_main_file, $wp_filesystem, $depth = 0) {
         if ($wp_filesystem->exists($source . '/' . $plugin_main_file)) {
             return $source;
+        }
+
+        if ($depth >= 3) {
+            return '';
         }
 
         $entries = $wp_filesystem->dirlist($source, false, true);
@@ -196,8 +200,9 @@ class PP_Updater {
             }
 
             $candidate = $source . '/' . $entry_name;
-            if ($wp_filesystem->exists($candidate . '/' . $plugin_main_file)) {
-                return $candidate;
+            $found = $this->detect_plugin_source_directory($candidate, $plugin_main_file, $wp_filesystem, $depth + 1);
+            if (!empty($found)) {
+                return $found;
             }
         }
 
