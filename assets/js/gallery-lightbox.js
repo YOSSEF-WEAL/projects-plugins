@@ -70,11 +70,17 @@
             slidesPerView: 1,
             spaceBetween: 8,
             speed: 350,
+            loop: true,
+            loopAdditionalSlides: 2,
             navigation: {
                 nextEl: modal.querySelector('.pp-lightbox-next'),
                 prevEl: modal.querySelector('.pp-lightbox-prev'),
             },
         });
+
+        if (typeof modal.ppLightboxSwiper.slideToLoop === 'function') {
+            modal.ppLightboxSwiper.slideToLoop(startIndex, 0);
+        }
 
         modal.classList.add('is-open');
         document.body.classList.add('pp-lightbox-open');

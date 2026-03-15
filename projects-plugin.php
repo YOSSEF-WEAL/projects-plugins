@@ -51,6 +51,19 @@ final class Projects_Plugin {
         wp_enqueue_script('pp-frontend', PP_URL . 'assets/js/frontend.js', ['jquery', 'pp-swiper'], $frontend_js_ver, true);
         wp_enqueue_script('pp-gallery-lightbox', PP_URL . 'assets/js/gallery-lightbox.js', ['pp-swiper'], $gallery_js_ver, true);
 
+        if (is_singular('project')) {
+            $single_style = sanitize_key((string) PP_Helpers::get_setting('single_project_style', 'style-01'));
+            $single_style_path = PP_PATH . 'assets/css/single-project-styles/' . $single_style . '.css';
+            if (file_exists($single_style_path)) {
+                wp_enqueue_style(
+                    'pp-single-project-style',
+                    PP_URL . 'assets/css/single-project-styles/' . $single_style . '.css',
+                    ['pp-frontend'],
+                    (string) filemtime($single_style_path)
+                );
+            }
+        }
+
         wp_localize_script('pp-frontend', 'PP_DATA', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'rest_url' => esc_url_raw(rest_url('projects-plugin/v1')),

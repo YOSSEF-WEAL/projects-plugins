@@ -1,0 +1,7 @@
+.pp-single-project.pp-single-style-08 .pp-layout-08 { max-width: 1220px; margin: 0 auto; padding: 24px 16px 40px; }
+.pp-single-project.pp-single-style-08 .pp-l08-wrap { display:grid; grid-template-columns:320px 1fr; gap:20px; }
+.pp-single-project.pp-single-style-08 .pp-l08-side { background:#f2f8e8; border:1px solid #d3e3b9; border-radius:16px; padding:18px; position:sticky; top:88px; height:max-content; }
+.pp-single-project.pp-single-style-08 .pp-l08-chip { display:inline-block; margin:8px 0; border-radius:999px; background:#d4e8b0; padding:4px 10px; }
+.pp-single-project.pp-single-style-08 .pp-l08-main { display:grid; gap:18px; }
+.pp-single-project.pp-single-style-08 .pp-l08-content,.pp-single-project.pp-single-style-08 .pp-l08-gallery { background:#fff; border:1px solid #dbe8c7; border-radius:14px; padding:18px; }
+@media (max-width:900px){ .pp-single-project.pp-single-style-08 .pp-l08-wrap{grid-template-columns:1fr;} .pp-single-project.pp-single-style-08 .pp-l08-side{position:static;} }

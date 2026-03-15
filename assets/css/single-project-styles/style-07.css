@@ -1,0 +1,8 @@
+.pp-single-project.pp-single-style-07 .pp-layout-07 { max-width: 1140px; margin: 0 auto; padding: 28px 16px 42px; }
+.pp-single-project.pp-single-style-07 .pp-l07-head { text-align:center; margin-bottom:18px; }
+.pp-single-project.pp-single-style-07 .pp-l07-head span { display:inline-block; background:#d8edf5; padding:5px 10px; border-radius:999px; }
+.pp-single-project.pp-single-style-07 .pp-l07-strip { margin-bottom:20px; }
+.pp-single-project.pp-single-style-07 .pp-l07-columns { display:grid; grid-template-columns:1.3fr .7fr; gap:20px; }
+.pp-single-project.pp-single-style-07 .pp-l07-content,.pp-single-project.pp-single-style-07 .pp-l07-side { background:#fff; border:1px solid #cce3ec; border-radius:14px; padding:20px; }
+.pp-single-project.pp-single-style-07 .pp-l07-side { position:sticky; top:88px; height:max-content; }
+@media (max-width:900px){ .pp-single-project.pp-single-style-07 .pp-l07-columns{grid-template-columns:1fr;} .pp-single-project.pp-single-style-07 .pp-l07-side{position:static;} }

@@ -12,6 +12,7 @@ class PP_Helpers {
             'projects_per_page' => 9,
             'pagination_per_page' => 9,
             'enabled_views' => ['grid', 'masonry', 'slider', 'list'],
+            'single_project_style' => 'style-01',
         ];
 
         $saved = get_option('pp_settings', []);

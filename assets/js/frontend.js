@@ -103,7 +103,9 @@
             slidesPerView: mobile,
             spaceBetween: 16,
             speed: 550,
-            watchOverflow: true,
+            loop: true,
+            loopAdditionalSlides: 2,
+            watchOverflow: false,
             observer: true,
             observeParents: true,
             navigation: {
@@ -128,9 +130,18 @@
             return;
         }
 
+        if (trackEl.ppSwiper.params && trackEl.ppSwiper.params.loop && typeof trackEl.ppSwiper.loopDestroy === 'function' && typeof trackEl.ppSwiper.loopCreate === 'function') {
+            trackEl.ppSwiper.loopDestroy();
+            trackEl.ppSwiper.loopCreate();
+        }
+
         trackEl.ppSwiper.update();
         if (resetToStart) {
-            trackEl.ppSwiper.slideTo(0, 0);
+            if (trackEl.ppSwiper.params && trackEl.ppSwiper.params.loop && typeof trackEl.ppSwiper.slideToLoop === 'function') {
+                trackEl.ppSwiper.slideToLoop(0, 0);
+            } else {
+                trackEl.ppSwiper.slideTo(0, 0);
+            }
         }
     }
 
@@ -297,6 +308,8 @@
                 slidesPerView: 1,
                 spaceBetween: 14,
                 speed: 550,
+                loop: true,
+                loopAdditionalSlides: 2,
                 observer: true,
                 observeParents: true,
                 navigation: {

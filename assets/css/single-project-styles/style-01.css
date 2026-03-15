@@ -1,0 +1,10 @@
+.pp-single-project.pp-single-style-01 .pp-layout-01 { max-width: 1200px; margin: 0 auto; padding: 0 16px 40px; }
+.pp-single-project.pp-single-style-01 .pp-l01-hero { position: relative; min-height: 430px; border-radius: 0 0 24px 24px; overflow: hidden; display:flex; align-items:end; }
+.pp-single-project.pp-single-style-01 .pp-l01-hero-bg, .pp-single-project.pp-single-style-01 .pp-l01-hero-bg img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.pp-single-project.pp-single-style-01 .pp-l01-hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg,rgba(15,25,44,.2),rgba(15,25,44,.9)); }
+.pp-single-project.pp-single-style-01 .pp-l01-hero-content { position:relative; color:#fff; padding:26px; z-index:2; }
+.pp-single-project.pp-single-style-01 .pp-l01-title { margin:8px 0; font-size:clamp(30px,5vw,52px); }
+.pp-single-project.pp-single-style-01 .pp-l01-body { margin-top:24px; display:grid; grid-template-columns:1.1fr .9fr; gap:22px; }
+.pp-single-project.pp-single-style-01 .pp-l01-content, .pp-single-project.pp-single-style-01 .pp-l01-gallery, .pp-single-project.pp-single-style-01 .pp-l01-location-copy, .pp-single-project.pp-single-style-01 .pp-l01-location-map { background:#fff; border:1px solid #dbe3ef; border-radius:16px; padding:20px; }
+.pp-single-project.pp-single-style-01 .pp-l01-location { margin-top:24px; display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+@media (max-width: 900px){ .pp-single-project.pp-single-style-01 .pp-l01-body,.pp-single-project.pp-single-style-01 .pp-l01-location{grid-template-columns:1fr;} }

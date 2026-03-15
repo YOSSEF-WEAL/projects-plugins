@@ -1,0 +1,7 @@
+.pp-single-project.pp-single-style-05 .pp-layout-05 { max-width: 1200px; margin: 0 auto; padding-bottom: 44px; }
+.pp-single-project.pp-single-style-05 .pp-l05-hero img { width:100%; max-height:60vh; object-fit:cover; display:block; }
+.pp-single-project.pp-single-style-05 .pp-l05-floating-card { max-width:760px; margin:-70px auto 22px; background:#fff; border:1px solid #e8d7cc; border-radius:20px; padding:24px; position:relative; z-index:2; }
+.pp-single-project.pp-single-style-05 .pp-l05-main { max-width:1100px; margin:0 auto; padding:0 16px; display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.pp-single-project.pp-single-style-05 .pp-l05-content,.pp-single-project.pp-single-style-05 .pp-l05-gallery { background:#fff; border:1px solid #eedfd5; border-radius:16px; padding:18px; }
+.pp-single-project.pp-single-style-05 .pp-l05-footer { max-width:1100px; margin:18px auto 0; padding:0 16px; }
+@media (max-width:900px){ .pp-single-project.pp-single-style-05 .pp-l05-main{grid-template-columns:1fr;} .pp-single-project.pp-single-style-05 .pp-l05-floating-card{margin:16px;}} 
