@@ -87,7 +87,7 @@ class PP_Updater {
             'name' => $name,
             'slug' => $this->plugin_slug,
             'version' => $release['version'],
-            'author' => '<a href="https://github.com/YOSSEF-WEAL">Malka</a>',
+            'author' => '<a href="https://portfolio-yossef-weal.netlify.app/">Yossef Weal</a>',
             'homepage' => PP_GITHUB_REPOSITORY_URL,
             'download_link' => $release['package_url'],
             'requires' => '6.0',

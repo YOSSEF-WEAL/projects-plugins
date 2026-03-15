@@ -2,8 +2,9 @@
 /**
  * Plugin Name: Projects Plugin for Elementor
  * Description: Manage and display projects with Elementor widgets, filtering, pagination, and location support.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Malka
+ * Author URI: https://portfolio-yossef-weal.netlify.app/
  * Update URI: https://github.com/YOSSEF-WEAL/projects-plugins
  * Text Domain: projects-plugin
  */
@@ -12,7 +13,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PP_VERSION', '1.0.1');
+define('PP_VERSION', '1.0.2');
 define('PP_PATH', plugin_dir_path(__FILE__));
 define('PP_URL', plugin_dir_url(__FILE__));
 define('PP_PLUGIN_FILE', __FILE__);
