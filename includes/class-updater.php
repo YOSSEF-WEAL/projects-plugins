@@ -70,7 +70,7 @@ class PP_Updater {
     }
 
     public function plugins_api($result, $action, $args) {
-        if ($action !== 'plugin_information' || empty($args->slug) || $args->slug !== $this->plugin_slug) {
+        if ($action !== 'plugin_information' || !is_object($args) || empty($args->slug) || $args->slug !== $this->plugin_slug) {
             return $result;
         }
 
@@ -101,6 +101,14 @@ class PP_Updater {
     }
 
     public function normalize_source_directory($source, $remote_source, $upgrader, $hook_extra) {
+        if (is_wp_error($source)) {
+            return $source;
+        }
+
+        if (!is_array($hook_extra)) {
+            return $source;
+        }
+
         $is_target_plugin = !empty($hook_extra['plugin']) && $hook_extra['plugin'] === $this->plugin_basename;
         if (!$is_target_plugin && !empty($hook_extra['plugins']) && is_array($hook_extra['plugins'])) {
             $is_target_plugin = in_array($this->plugin_basename, $hook_extra['plugins'], true);
@@ -112,6 +120,10 @@ class PP_Updater {
 
         global $wp_filesystem;
         if (!$wp_filesystem) {
+            return $source;
+        }
+
+        if (!is_string($source) || $source === '' || !is_string($remote_source) || $remote_source === '') {
             return $source;
         }
 
@@ -136,7 +148,8 @@ class PP_Updater {
         $source_is_root = wp_normalize_path($source) === wp_normalize_path($remote_source);
 
         if ($source_is_root) {
-            if (!$wp_filesystem->mkdir($normalized, FS_CHMOD_DIR)) {
+            $chmod_dir = defined('FS_CHMOD_DIR') ? FS_CHMOD_DIR : 0755;
+            if (!$wp_filesystem->mkdir($normalized, $chmod_dir)) {
                 return new WP_Error(
                     'pp_updater_cannot_create_directory',
                     __('Could not prepare plugin update directory.', 'projects-plugin')
@@ -171,10 +184,7 @@ class PP_Updater {
         }
 
         if (!$wp_filesystem->move($source, $normalized, true)) {
-            return new WP_Error(
-                'pp_updater_cannot_normalize_source',
-                __('Could not prepare plugin update package.', 'projects-plugin')
-            );
+            return $source;
         }
 
         return $normalized;
