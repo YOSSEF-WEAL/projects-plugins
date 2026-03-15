@@ -53,3 +53,10 @@
 ## معلومات الإصدار
 - النسخة الحالية: 1.0.1
 
+## التحديثات التلقائية من GitHub Releases
+- الإضافة تدعم فحص التحديثات تلقائيًا من: `https://github.com/YOSSEF-WEAL/projects-plugins/releases/latest`.
+- عند فتح صفحة **Plugins** أو **Dashboard > Updates** يتم عمل فحص مباشر لآخر Release.
+- أفضل ممارسة: ارفع ملف ZIP داخل كل Release (Asset) بحيث يحتوي مجلد الإضافة بالكامل.
+- رقم الإصدار المعتمد هو `tag_name` في GitHub (مثل: `v1.0.2` أو `1.0.2`).
+- يمكن إضافة توكن GitHub (اختياري) لتقليل مشاكل Rate Limit عبر تعريف ثابت في `wp-config.php`:
+  - `define('PP_GITHUB_TOKEN', 'YOUR_GITHUB_TOKEN');`

@@ -4,6 +4,7 @@
  * Description: Manage and display projects with Elementor widgets, filtering, pagination, and location support.
  * Version: 1.0.1
  * Author: Malka
+ * Update URI: https://github.com/YOSSEF-WEAL/projects-plugins
  * Text Domain: projects-plugin
  */
 
@@ -14,11 +15,16 @@ if (!defined('ABSPATH')) {
 define('PP_VERSION', '1.0.1');
 define('PP_PATH', plugin_dir_path(__FILE__));
 define('PP_URL', plugin_dir_url(__FILE__));
+define('PP_PLUGIN_FILE', __FILE__);
+define('PP_GITHUB_REPOSITORY', 'YOSSEF-WEAL/projects-plugins');
+define('PP_GITHUB_REPOSITORY_URL', 'https://github.com/' . PP_GITHUB_REPOSITORY);
+define('PP_GITHUB_LATEST_RELEASE_API', 'https://api.github.com/repos/' . PP_GITHUB_REPOSITORY . '/releases/latest');
 
 require_once PP_PATH . 'includes/class-helpers.php';
 require_once PP_PATH . 'includes/class-post-types.php';
 require_once PP_PATH . 'includes/class-meta-boxes.php';
 require_once PP_PATH . 'includes/class-settings.php';
+require_once PP_PATH . 'includes/class-updater.php';
 require_once PP_PATH . 'elementor/class-elementor.php';
 
 final class Projects_Plugin {
@@ -136,4 +142,5 @@ register_deactivation_hook(__FILE__, function () {
 
 add_action('plugins_loaded', function () {
     new Projects_Plugin();
+    new PP_Updater(PP_PLUGIN_FILE);
 });
