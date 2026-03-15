@@ -110,14 +110,53 @@ class PP_Updater {
             return $source;
         }
 
-        if (basename($source) === $this->plugin_directory) {
+        $source = untrailingslashit($source);
+        $remote_source = untrailingslashit($remote_source);
+        $normalized = $remote_source . '/' . $this->plugin_directory;
+
+        if (wp_normalize_path($source) === wp_normalize_path($normalized) || basename($source) === $this->plugin_directory) {
             return $source;
         }
 
-        $normalized = trailingslashit($remote_source) . $this->plugin_directory;
-
         if ($wp_filesystem->exists($normalized)) {
             $wp_filesystem->delete($normalized, true);
+        }
+
+        $source_is_root = wp_normalize_path($source) === wp_normalize_path($remote_source);
+
+        if ($source_is_root) {
+            if (!$wp_filesystem->mkdir($normalized, FS_CHMOD_DIR)) {
+                return new WP_Error(
+                    'pp_updater_cannot_create_directory',
+                    __('Could not prepare plugin update directory.', 'projects-plugin')
+                );
+            }
+
+            $entries = $wp_filesystem->dirlist($source, false, true);
+            if (!is_array($entries)) {
+                return new WP_Error(
+                    'pp_updater_cannot_read_package',
+                    __('Could not read plugin update package files.', 'projects-plugin')
+                );
+            }
+
+            foreach (array_keys($entries) as $entry_name) {
+                if ($entry_name === $this->plugin_directory || $entry_name === '.' || $entry_name === '..') {
+                    continue;
+                }
+
+                $from = $source . '/' . $entry_name;
+                $to = $normalized . '/' . $entry_name;
+
+                if (!$wp_filesystem->move($from, $to, true)) {
+                    return new WP_Error(
+                        'pp_updater_cannot_move_package_content',
+                        __('Could not prepare plugin update package files.', 'projects-plugin')
+                    );
+                }
+            }
+
+            return $normalized;
         }
 
         if (!$wp_filesystem->move($source, $normalized, true)) {
