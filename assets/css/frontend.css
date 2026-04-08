@@ -278,6 +278,55 @@
     overflow-x: clip;
 }
 
+.pp-single-project.pp-single-project-edit-mode {
+    background: transparent;
+}
+
+.pp-single-project.pp-single-project-edit-mode .pp-layout {
+    max-width: 100%;
+}
+
+.pp-single-project.pp-single-project-edit-mode .pp-project-content .elementor,
+.pp-single-project.pp-single-project-edit-mode .pp-project-content .elementor-section,
+.pp-single-project.pp-single-project-edit-mode .pp-project-content .elementor-container,
+.pp-single-project.pp-single-project-edit-mode .pp-project-content .e-con {
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.pp-editor-placeholder {
+    min-height: 160px;
+    border: 2px dashed #c7c7c7;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #6f7479;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+.pp-editor-placeholder.pp-editor-placeholder-gallery {
+    min-height: 260px;
+}
+
+.pp-editor-placeholder.pp-editor-placeholder-map {
+    min-height: 260px;
+}
+
+.pp-editor-placeholder-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px dashed currentColor;
+    border-radius: 999px;
+    opacity: 0.85;
+}
+
 .pp-single-project-v2 .pp-sp-hero {
     position: relative;
     min-height: clamp(360px, 60vh, 680px);

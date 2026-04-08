@@ -2,14 +2,16 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-get_header();
 require_once PP_PATH . 'templates/parts/single-components.php';
+
+$is_elementor_editor = function_exists('pp_single_is_elementor_edit_mode') && pp_single_is_elementor_edit_mode();
+get_header();
 
 $single_style = sanitize_key((string) PP_Helpers::get_setting('single_project_style', 'style-01'));
 $single_style_key = preg_match('/^style-\d{2}$/', $single_style) ? $single_style : 'style-01';
 $single_style_class = 'pp-single-' . $single_style_key;
 ?>
-<main class="pp-single-project pp-single-project-v2 <?php echo esc_attr($single_style_class); ?>" dir="rtl">
+<main class="pp-single-project pp-single-project-v2 <?php echo esc_attr($single_style_class); ?><?php echo $is_elementor_editor ? ' pp-single-project-edit-mode' : ''; ?>" dir="rtl">
     <?php while (have_posts()) : the_post(); ?>
         <?php
         global $pp_single_ctx;
@@ -28,7 +30,22 @@ $single_style_class = 'pp-single-' . $single_style_key;
         $has_location = $has_valid_coordinates || !empty($location_shortlink) || !empty($location_label);
         $terms = get_the_terms($post_id, 'project_category');
         $primary_term = (!empty($terms) && !is_wp_error($terms)) ? $terms[0] : null;
-        $has_content = trim((string) get_the_content()) !== '';
+        $has_real_content = trim((string) get_the_content()) !== '';
+        if (
+            !$has_real_content &&
+            did_action('elementor/loaded') &&
+            class_exists('\Elementor\Plugin')
+        ) {
+            $elementor = \Elementor\Plugin::$instance;
+            if (
+                $elementor &&
+                !empty($elementor->db) &&
+                method_exists($elementor->db, 'is_built_with_elementor') &&
+                $elementor->db->is_built_with_elementor($post_id)
+            ) {
+                $has_real_content = true;
+            }
+        }
         $project_excerpt = get_the_excerpt($post_id);
         if (empty($project_excerpt)) {
             $project_excerpt = PP_Helpers::get_excerpt($post_id, 22);
@@ -49,7 +66,8 @@ $single_style_class = 'pp-single-' . $single_style_key;
             'has_location' => $has_location,
             'primary_term' => $primary_term,
             'project_excerpt' => $project_excerpt,
-            'has_content' => $has_content,
+            'has_content' => $has_real_content,
+            'has_real_content' => $has_real_content,
         ];
         $single_template_file = PP_PATH . 'templates/single-styles/' . $single_style_key . '.php';
         if (!file_exists($single_template_file)) {
@@ -59,4 +77,6 @@ $single_style_class = 'pp-single-' . $single_style_key;
         ?>
     <?php endwhile; ?>
 </main>
-<?php get_footer(); ?>
+<?php
+get_footer();
+?>

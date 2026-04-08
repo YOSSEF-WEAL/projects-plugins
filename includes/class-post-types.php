@@ -29,7 +29,7 @@ class PP_Post_Types {
             'has_archive' => true,
             'rewrite' => ['slug' => 'projects'],
             'menu_icon' => 'dashicons-portfolio',
-            'supports' => ['title', 'editor', 'thumbnail', 'excerpt'],
+            'supports' => ['title', 'editor', 'thumbnail', 'excerpt', 'author', 'revisions', 'custom-fields', 'page-attributes'],
             'show_in_rest' => true,
         ]);
     }

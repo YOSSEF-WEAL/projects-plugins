@@ -13,6 +13,8 @@ class PP_Helpers {
             'pagination_per_page' => 9,
             'enabled_views' => ['grid', 'masonry', 'slider', 'list'],
             'single_project_style' => 'style-01',
+            'enable_single_template' => 1,
+            'enable_archive_template' => 1,
         ];
 
         $saved = get_option('pp_settings', []);

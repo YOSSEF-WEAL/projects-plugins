@@ -193,3 +193,12 @@
         align-items: flex-start;
     }
 }
+
+.pp-single-project.pp-single-style-10.pp-single-project-edit-mode .pp-l10-hero,
+.pp-single-project.pp-single-style-10.pp-single-project-edit-mode .pp-l10-main {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.pp-single-project.pp-single-style-10.pp-single-project-edit-mode .pp-l10-hero-media img {
+    min-height: 180px;
+}

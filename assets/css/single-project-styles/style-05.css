@@ -5,3 +5,12 @@
 .pp-single-project.pp-single-style-05 .pp-l05-content,.pp-single-project.pp-single-style-05 .pp-l05-gallery { background:#fff; border:1px solid #eedfd5; border-radius:16px; padding:18px; }
 .pp-single-project.pp-single-style-05 .pp-l05-footer { max-width:1100px; margin:18px auto 0; padding:0 16px; }
 @media (max-width:900px){ .pp-single-project.pp-single-style-05 .pp-l05-main{grid-template-columns:1fr;} .pp-single-project.pp-single-style-05 .pp-l05-floating-card{margin:16px;}} 
+
+.pp-single-project.pp-single-style-05.pp-single-project-edit-mode .pp-l05-floating-card {
+    max-width: 1100px;
+    margin: 16px auto 22px;
+}
+
+.pp-single-project.pp-single-style-05.pp-single-project-edit-mode .pp-l05-main {
+    grid-template-columns: minmax(0, 1fr);
+}

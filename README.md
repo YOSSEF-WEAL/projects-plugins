@@ -26,6 +26,8 @@
 - **Default Projects Per Page**: العدد الافتراضي لأرشيف `project` والتصنيفات.
 - **Pagination Items Per Page**: العدد الافتراضي لعنصر Elementor عند التصفح أو التحميل اللاحق.
 - **Enable View Modes**: تفعيل/تعطيل الشبكة، الماسونري، السلايدر، القائمة على مستوى الموقع.
+- **Use Plugin Single Template**: تفعيل/تعطيل القالب المدمج لصفحة المشروع المفردة. عند الإيقاف يتم ترك التحكم للقالب/Elementor.
+- **Use Plugin Archive Template**: تفعيل/تعطيل القالب المدمج للأرشيف والتصنيفات. عند الإيقاف يتم ترك التحكم للقالب/Elementor.
 
 ## إنشاء المحتوى
 1) من «Projects > Add New» أضف عنواناً ومحتوى وصورة بارزة (تستخدم في البطاقات والسلايدر).
@@ -45,7 +47,16 @@
 
 ## القوالب والواجهات الأمامية
 - تسجّل الإضافة قالب `templates/archive-project.php` للأرشيف والتصنيف، و`templates/single-project.php` للعرض الفردي.
+- أثناء التحرير عبر Elementor، يظل Layout القالب المدمج ظاهرًا في الصفحة الفردية للمشروع.
+- في وضع التحرير، يتم إخفاء هيدر/فوتر الثيم داخل قالب المشروع لتجربة أقرب إلى `Elementor Full Width`.
+- أقسام القالب التي لا تحتوي بيانات فعلية تظهر كـ placeholders بدل الاختفاء (خصوصًا المحتوى، الجاليري، والخريطة).
+- تمت إضافة مجموعة Dynamic Tags للمشروع: **Project Main Image**, **Project Title**, **Project Excerpt**, **Project Description**, **Project Primary Category**, **Project Location Label**, **Project Location Link**.
 - ملفات الستايل والسكريبت موجودة تحت `assets/`، وتُحمّل تلقائياً مع دعم CDN لمكتبة Swiper.
+
+### Hook للمطورين (اختياري)
+- يمكن التحكم في قرار استخدام قالب الإضافة عبر الفلتر:
+  - `pp_should_use_plugin_template`
+- قيمة الفلتر الافتراضية `true`، ويمرر مصفوفة context تحتوي `type` (`single` أو `archive`) ومعلومات إضافية.
 
 ## الترجمة
 نطاق النصوص: `projects-plugin`. جميع السلاسل قابلة للترجمة عبر ملفات PO/MO أو إضافات الترجمة المعتادة.

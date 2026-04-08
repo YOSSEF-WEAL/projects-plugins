@@ -104,21 +104,112 @@ final class Projects_Plugin {
     }
 
     public function template_loader($template) {
-        if (is_singular('project')) {
-            $custom = PP_PATH . 'templates/single-project.php';
-            if (file_exists($custom)) {
-                return $custom;
+        $is_single_project = is_singular('project');
+        $is_project_archive = is_post_type_archive('project') || is_tax('project_category');
+
+        if (!$is_single_project && !$is_project_archive) {
+            return $template;
+        }
+
+        if ($is_single_project) {
+            $built_with_elementor = $this->is_single_project_built_with_elementor();
+            $is_elementor_preview = $this->is_elementor_editor_or_preview_request();
+
+            if (!$this->use_plugin_single_template()) {
+                return $template;
+            }
+
+            $should_use_single_template = apply_filters('pp_should_use_plugin_template', true, [
+                'type' => 'single',
+                'template' => $template,
+                'post_id' => (int) get_queried_object_id(),
+                'is_elementor_preview' => $is_elementor_preview,
+                'is_built_with_elementor' => $built_with_elementor,
+            ]);
+
+            if (!$should_use_single_template) {
+                return $template;
+            }
+
+            $single_template = PP_PATH . 'templates/single-project.php';
+            if (file_exists($single_template)) {
+                return $single_template;
             }
         }
 
-        if (is_post_type_archive('project') || is_tax('project_category')) {
-            $custom = PP_PATH . 'templates/archive-project.php';
-            if (file_exists($custom)) {
-                return $custom;
+        if ($is_project_archive) {
+            if (!$this->use_plugin_archive_template()) {
+                return $template;
+            }
+
+            $should_use_archive_template = apply_filters('pp_should_use_plugin_template', true, [
+                'type' => 'archive',
+                'template' => $template,
+            ]);
+
+            if (!$should_use_archive_template) {
+                return $template;
+            }
+
+            $archive_template = PP_PATH . 'templates/archive-project.php';
+            if (file_exists($archive_template)) {
+                return $archive_template;
             }
         }
 
         return $template;
+    }
+
+    private function is_single_project_built_with_elementor() {
+        if (!did_action('elementor/loaded')) {
+            return false;
+        }
+
+        $post_id = (int) get_queried_object_id();
+        if ($post_id <= 0) {
+            return false;
+        }
+
+        $edit_mode = get_post_meta($post_id, '_elementor_edit_mode', true);
+        if ($edit_mode === 'builder') {
+            return true;
+        }
+
+        $elementor_data = get_post_meta($post_id, '_elementor_data', true);
+        return !empty($elementor_data);
+    }
+
+    private function is_elementor_editor_or_preview_request() {
+        if (!did_action('elementor/loaded')) {
+            return false;
+        }
+
+        if (isset($_GET['elementor-preview'])) {
+            return true;
+        }
+
+        if (class_exists('\Elementor\Plugin')) {
+            $elementor = \Elementor\Plugin::$instance;
+            if ($elementor) {
+                if (!empty($elementor->preview) && method_exists($elementor->preview, 'is_preview_mode') && $elementor->preview->is_preview_mode()) {
+                    return true;
+                }
+
+                if (!empty($elementor->editor) && method_exists($elementor->editor, 'is_edit_mode') && $elementor->editor->is_edit_mode()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function use_plugin_single_template() {
+        return (bool) PP_Helpers::get_setting('enable_single_template', 1);
+    }
+
+    private function use_plugin_archive_template() {
+        return (bool) PP_Helpers::get_setting('enable_archive_template', 1);
     }
 
     public function adjust_project_queries($query) {

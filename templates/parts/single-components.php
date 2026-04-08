@@ -19,72 +19,138 @@ if (!function_exists('pp_single_get')) {
 
 if (!function_exists('pp_single_has_content')) {
     function pp_single_has_content() {
-        return (bool) pp_single_get('has_content', false);
+        $has_content = (bool) pp_single_get('has_content', false);
+        return $has_content || pp_single_is_elementor_edit_mode();
     }
 }
 
 if (!function_exists('pp_single_render_content')) {
     function pp_single_render_content() {
-        if (!pp_single_has_content()) {
+        $has_real_content = (bool) pp_single_get('has_real_content', false);
+        if ($has_real_content) {
+            the_content();
             return;
         }
-        the_content();
+
+        if (!pp_single_is_elementor_edit_mode()) {
+            return;
+        }
+        ?>
+        <div class="pp-editor-placeholder pp-editor-placeholder-content">
+            <?php esc_html_e('Project content area (add Elementor widgets here).', 'projects-plugin'); ?>
+        </div>
+        <?php
+    }
+}
+
+if (!function_exists('pp_single_is_elementor_edit_mode')) {
+    function pp_single_is_elementor_edit_mode() {
+        if (!did_action('elementor/loaded')) {
+            return false;
+        }
+
+        if (isset($_GET['elementor-preview'])) {
+            return true;
+        }
+
+        if (class_exists('\Elementor\Plugin')) {
+            $elementor = \Elementor\Plugin::$instance;
+            if ($elementor) {
+                if (!empty($elementor->preview) && method_exists($elementor->preview, 'is_preview_mode') && $elementor->preview->is_preview_mode()) {
+                    return true;
+                }
+
+                if (!empty($elementor->editor) && method_exists($elementor->editor, 'is_edit_mode') && $elementor->editor->is_edit_mode()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
 
 if (!function_exists('pp_single_has_gallery')) {
     function pp_single_has_gallery() {
         $gallery_ids = pp_single_get('gallery_ids', []);
-        return is_array($gallery_ids) && !empty($gallery_ids);
+        return (is_array($gallery_ids) && !empty($gallery_ids)) || pp_single_is_elementor_edit_mode();
     }
 }
 
 if (!function_exists('pp_single_render_gallery')) {
     function pp_single_render_gallery() {
-        if (!pp_single_has_gallery()) {
+        $gallery_ids = pp_single_get('gallery_ids', []);
+        if (is_array($gallery_ids) && !empty($gallery_ids)) {
+            $args = ['ids' => $gallery_ids];
+            include PP_PATH . 'templates/parts/slider.php';
             return;
         }
 
-        $args = ['ids' => pp_single_get('gallery_ids', [])];
-        include PP_PATH . 'templates/parts/slider.php';
+        if (!pp_single_is_elementor_edit_mode()) {
+            return;
+        }
+        ?>
+        <div class="pp-editor-placeholder pp-editor-placeholder-gallery">
+            <?php esc_html_e('Project gallery placeholder (add gallery images in project settings).', 'projects-plugin'); ?>
+        </div>
+        <?php
     }
 }
 
 if (!function_exists('pp_single_has_location')) {
     function pp_single_has_location() {
-        return (bool) pp_single_get('has_location', false);
+        return (bool) pp_single_get('has_location', false) || pp_single_is_elementor_edit_mode();
     }
 }
 
 if (!function_exists('pp_single_can_show_embed_map')) {
     function pp_single_can_show_embed_map() {
-        return (bool) pp_single_get('can_show_embed_map', false) && !empty(pp_single_get('location_map_src', ''));
+        $can_show_real_map = (bool) pp_single_get('can_show_embed_map', false) && !empty(pp_single_get('location_map_src', ''));
+        return $can_show_real_map || pp_single_is_elementor_edit_mode();
     }
 }
 
 if (!function_exists('pp_single_render_location_map')) {
     function pp_single_render_location_map($height = 320, $title = 'project-location-map') {
-        if (!pp_single_can_show_embed_map()) {
+        $has_real_map = (bool) pp_single_get('can_show_embed_map', false) && !empty(pp_single_get('location_map_src', ''));
+        if ($has_real_map) {
+            $h = max(120, (int) $height);
+            ?>
+            <iframe title="<?php echo esc_attr($title); ?>" width="100%" height="<?php echo esc_attr((string) $h); ?>" style="border:0" loading="lazy" allowfullscreen src="<?php echo esc_url((string) pp_single_get('location_map_src', '')); ?>"></iframe>
+            <?php
             return;
         }
 
-        $h = max(120, (int) $height);
+        if (!pp_single_is_elementor_edit_mode()) {
+            return;
+        }
         ?>
-        <iframe title="<?php echo esc_attr($title); ?>" width="100%" height="<?php echo esc_attr((string) $h); ?>" style="border:0" loading="lazy" allowfullscreen src="<?php echo esc_url((string) pp_single_get('location_map_src', '')); ?>"></iframe>
+        <div class="pp-editor-placeholder pp-editor-placeholder-map" style="min-height:<?php echo esc_attr((string) max(120, (int) $height)); ?>px;">
+            <?php esc_html_e('Project map placeholder (set location + API key to show map).', 'projects-plugin'); ?>
+        </div>
         <?php
     }
 }
 
 if (!function_exists('pp_single_render_location_link')) {
     function pp_single_render_location_link($text = '', $class = 'pp-location-link') {
-        if (!pp_single_has_location()) {
-            return;
-        }
-
         $label = trim((string) $text);
         if ($label === '') {
             $label = __('View Location', 'projects-plugin');
         }
+
+        if (!pp_single_has_location()) {
+            return;
+        }
+
+        $has_real_location = (bool) pp_single_get('has_location', false);
+        if (!$has_real_location && pp_single_is_elementor_edit_mode()) {
+            ?>
+            <span class="pp-editor-placeholder-link"><?php echo esc_html($label); ?></span>
+            <?php
+            return;
+        }
+
         $class = trim((string) $class);
         if ($class !== '') {
             ?>

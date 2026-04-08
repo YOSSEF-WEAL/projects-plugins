@@ -45,6 +45,8 @@ class PP_Settings {
         add_settings_field('projects_per_page', __('Default Projects Per Page', 'projects-plugin'), [__CLASS__, 'field_projects_per_page'], 'pp-settings-general', 'pp_general');
         add_settings_field('pagination_per_page', __('Pagination Items Per Page', 'projects-plugin'), [__CLASS__, 'field_pagination_per_page'], 'pp-settings-general', 'pp_general');
         add_settings_field('enabled_views', __('Enable View Modes', 'projects-plugin'), [__CLASS__, 'field_enabled_views'], 'pp-settings-general', 'pp_general');
+        add_settings_field('enable_single_template', __('Use Plugin Single Template', 'projects-plugin'), [__CLASS__, 'field_enable_single_template'], 'pp-settings-single', 'pp_single_project');
+        add_settings_field('enable_archive_template', __('Use Plugin Archive Template', 'projects-plugin'), [__CLASS__, 'field_enable_archive_template'], 'pp-settings-single', 'pp_single_project');
         add_settings_field('single_project_style', __('Single Project Style', 'projects-plugin'), [__CLASS__, 'field_single_project_style'], 'pp-settings-single', 'pp_single_project');
     }
 
@@ -58,6 +60,8 @@ class PP_Settings {
         $allowed_views = ['grid', 'masonry', 'slider', 'list'];
         $views = isset($input['enabled_views']) && is_array($input['enabled_views']) ? array_map('sanitize_text_field', $input['enabled_views']) : [];
         $clean['enabled_views'] = array_values(array_intersect($allowed_views, $views));
+        $clean['enable_single_template'] = !empty($input['enable_single_template']) ? 1 : 0;
+        $clean['enable_archive_template'] = !empty($input['enable_archive_template']) ? 1 : 0;
         $style_options = self::get_single_style_options();
         $single_style = sanitize_key($input['single_project_style'] ?? 'style-01');
         $clean['single_project_style'] = array_key_exists($single_style, $style_options) ? $single_style : 'style-01';
@@ -144,6 +148,34 @@ class PP_Settings {
         </div>
         <p class="description">
             <?php esc_html_e('Choose the visual style for the single project page layout.', 'projects-plugin'); ?>
+        </p>
+        <?php
+    }
+
+    public static function field_enable_single_template() {
+        $settings = self::settings();
+        $enabled = !empty($settings['enable_single_template']);
+        ?>
+        <label>
+            <input type="checkbox" name="pp_settings[enable_single_template]" value="1" <?php checked($enabled); ?>>
+            <?php esc_html_e('Use plugin built-in single project layout.', 'projects-plugin'); ?>
+        </label>
+        <p class="description">
+            <?php esc_html_e('Disable this if you want your theme or Elementor templates to control single project pages.', 'projects-plugin'); ?>
+        </p>
+        <?php
+    }
+
+    public static function field_enable_archive_template() {
+        $settings = self::settings();
+        $enabled = !empty($settings['enable_archive_template']);
+        ?>
+        <label>
+            <input type="checkbox" name="pp_settings[enable_archive_template]" value="1" <?php checked($enabled); ?>>
+            <?php esc_html_e('Use plugin built-in archive layout.', 'projects-plugin'); ?>
+        </label>
+        <p class="description">
+            <?php esc_html_e('Disable this if you want your theme or Elementor templates to control project archive/category pages.', 'projects-plugin'); ?>
         </p>
         <?php
     }
